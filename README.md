@@ -43,6 +43,25 @@ outputs = llm.generate(prompts, sampling_params)
 outputs[0]["text"]
 ```
 
+## Interactive KV Cache Walkthrough
+
+Open [the request lifecycle demo](docs/request-flow.html) in a browser (no
+installation, server, model, or GPU required). The Chinese-language visualization
+supports stepping, playback, timeline seeking, and token-to-slot inspection.
+It follows one request through block allocation, prefill, decode, a block
+boundary, and release, with links to the corresponding source files.
+
+This is a teaching simulation using 3 layers and 4 tokens per block, not an
+inference backend or a valid replacement for the default 256-token block
+configuration. It illustrates a request without a prefix-cache hit or chunked
+prefill; timing and token text are illustrative.
+
+The simulation invariants can be checked with Node.js's built-in test runner:
+
+```powershell
+node --test .\docs\request-flow.test.cjs
+```
+
 ## Benchmark
 
 See `bench.py` for benchmark.
