@@ -16,16 +16,16 @@ attention kernel 示例是与项目布局对应的教学性参考实现，用于
 
 标准自回归生成需要为每条序列保存每层 attention 的 K 和 V。假设：
 
-- batch size 为 \(B\)
-- 最大上下文长度为 \(L_{\max}\)
-- KV head 数量为 \(H_{kv}\)
-- head dimension 为 \(D\)
+- batch size 为 $B$
+- 最大上下文长度为 $L_{\max}$
+- KV head 数量为 $H_{kv}$
+- head dimension 为 $D$
 
 如果为每条请求预留一个连续的最大长度 tensor，单层 KV cache 的元素数量是：
 
-\[
+$$
 2 \times B \times L_{\max} \times H_{kv} \times D
-\]
+$$
 
 这里的 2 分别代表 K 和 V。这种方式有三个问题：
 
@@ -515,19 +515,19 @@ block_table:  [batch, max_num_logical_blocks]
 
 对于 batch 中第 `b` 条序列、第 `qh` 个 query head，attention 数学表达式仍然是：
 
-\[
+$$
 S_i = \frac{Q_{b,qh} K_{b,kvh,i}^{T}}{\sqrt{D}}
-\]
+$$
 
-\[
+$$
 P_i = \frac{\exp(S_i)}{\sum_j \exp(S_j)}
-\]
+$$
 
-\[
+$$
 O_{b,qh} = \sum_i P_i V_{b,kvh,i}
-\]
+$$
 
-差别只在于 \(K_i\) 和 \(V_i\) 不位于一块连续的序列内存中，而是通过页表读取。
+差别只在于 $K_i$ 和 $V_i$ 不位于一块连续的序列内存中，而是通过页表读取。
 
 ### 10.1 GQA 的 Head 映射
 
@@ -584,7 +584,7 @@ for sequence b in batch:
 ```
 
 真实 GPU kernel 不会先保存完整 `scores` 和 `values`，因为这会产生额外的
-\(O(L)\) 中间显存访问。它通常使用 tiled computation 和 online softmax。
+$O(L)$ 中间显存访问。它通常使用 tiled computation 和 online softmax。
 
 ## 12. Online Softmax
 
